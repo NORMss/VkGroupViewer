@@ -54,6 +54,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.datastore.preferences)
+
     implementation(libs.bundles.ktor)
 
     implementation(libs.androidx.navigation.compose)
