@@ -1,12 +1,12 @@
 package com.norm.vkgroupviewer.usecases.vk
 
 import com.norm.vkgroupviewer.domain.repository.VkRepository
-import kotlinx.coroutines.flow.Flow
+import com.norm.vkgroupviewer.util.NetworkError
 
 class GetGroups(
     private val vkRepository: VkRepository,
 ) {
-    operator fun invoke(): Flow<List<String>> {
-        return vkRepository.getGroups()
+    suspend operator fun invoke(id: String): com.norm.vkgroupviewer.util.Result<String, NetworkError> {
+        return vkRepository.getGroups(id)
     }
 }
