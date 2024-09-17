@@ -1,6 +1,6 @@
 package com.norm.vkgroupviewer.usecases.vk
 
 data class VkUseCases(
-    val authentication: Authentication,
+    val getProfileInfo: GetProfileInfo,
     val getGroups: GetGroups,
 )

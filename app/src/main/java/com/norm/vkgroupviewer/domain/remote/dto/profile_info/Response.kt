@@ -1,4 +1,4 @@
-package com.norm.vkgroupviewer.domain.remote
+package com.norm.vkgroupviewer.domain.remote.dto.profile_info
 
 import kotlinx.serialization.Serializable
 
