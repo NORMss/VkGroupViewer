@@ -13,7 +13,9 @@ import androidx.compose.ui.Modifier
 import com.norm.vkgroupviewer.presentation.navigator.NavGraph
 import com.norm.vkgroupviewer.presentation.navigator.Route
 import com.norm.vkgroupviewer.ui.theme.VkGroupViewerTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

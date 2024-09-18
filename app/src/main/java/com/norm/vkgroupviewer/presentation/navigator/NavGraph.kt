@@ -8,6 +8,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.norm.vkgroupviewer.presentation.auth.AuthScreen
 import com.norm.vkgroupviewer.presentation.auth.AuthViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 @Composable
 fun NavGraph(
@@ -25,7 +29,7 @@ fun NavGraph(
             AuthScreen(
                 state = state,
                 onAuth = {
-                    TODO("Add auth method")
+                    viewModel.saveToken()
                 },
                 setToken = { token ->
                     viewModel.setToken(token)

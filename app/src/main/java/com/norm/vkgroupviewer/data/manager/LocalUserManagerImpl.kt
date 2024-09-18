@@ -1,16 +1,17 @@
 package com.norm.vkgroupviewer.data.manager
 
 import android.content.Context
-import com.norm.vkgroupviewer.domain.manager.LocalUserManager
-import com.norm.vkgroupviewer.domain.remote.TokenInfo
-import kotlinx.coroutines.flow.Flow
+import android.util.Log
+import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import com.norm.vkgroupviewer.domain.manager.LocalUserManager
+import com.norm.vkgroupviewer.domain.remote.TokenInfo
 import com.norm.vkgroupviewer.util.Constants
 import com.norm.vkgroupviewer.util.Constants.USER_SETTINGS
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class LocalUserManagerImpl(
@@ -18,8 +19,8 @@ class LocalUserManagerImpl(
 ) : LocalUserManager {
     override suspend fun saveToken(tokenInfo: TokenInfo) {
         tokenInfo.accessToken?.let {
-            context.dataStore.edit { settings ->
-                settings[PreferenceKeys.ACCESS_TOKEN] = tokenInfo.accessToken
+            context.dataStore.edit { preferences ->
+                preferences[PreferenceKeys.ACCESS_TOKEN] = tokenInfo.accessToken
             }
         }
     }

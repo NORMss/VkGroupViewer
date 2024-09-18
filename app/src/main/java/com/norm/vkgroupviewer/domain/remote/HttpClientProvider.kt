@@ -4,4 +4,5 @@ import io.ktor.client.HttpClient
 
 interface HttpClientProvider {
     val client: HttpClient
+    fun authClient(tokenInfo: TokenInfo)
 }

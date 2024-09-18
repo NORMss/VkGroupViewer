@@ -34,7 +34,7 @@ object AppModule {
     @Singleton
     fun provideTokenInfoUseCases(
         localUserManager: LocalUserManager,
-    ): TokenInfoUseCases{
+    ): TokenInfoUseCases {
         return TokenInfoUseCases(
             saveTokenInfo = SaveTokenInfo(localUserManager),
             readTokenInfo = ReadTokenInfo(localUserManager),
@@ -43,17 +43,15 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideHttpClientProvide(
-        tokenInfoUseCases: TokenInfoUseCases,
-    ): HttpClientProvider {
-        return AndroidHttpClientProvider(tokenInfoUseCases)
+    fun provideHttpClientProvide(): HttpClientProvider {
+        return AndroidHttpClientProvider()
     }
 
     @Provides
     @Singleton
     fun provideVkRepository(
         httpClientProvider: HttpClientProvider,
-    ): VkRepository{
+    ): VkRepository {
         return VkRepositoryImpl(
             httpClientProvider = httpClientProvider,
         )
@@ -63,7 +61,7 @@ object AppModule {
     @Singleton
     fun provideVkUseCases(
         vkRepository: VkRepository,
-    ): VkUseCases{
+    ): VkUseCases {
         return VkUseCases(
             getProfileInfo = GetProfileInfo(vkRepository),
             getGroups = GetGroups(vkRepository),

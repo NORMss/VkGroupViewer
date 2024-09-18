@@ -27,7 +27,7 @@ fun AuthScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         TextField(
-            value = state.token,
+            value = state.token ?: "",
             onValueChange = { token ->
                 setToken(token)
             },
