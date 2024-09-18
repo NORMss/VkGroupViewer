@@ -6,6 +6,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
+import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.ANDROID
 import io.ktor.client.plugins.logging.LogLevel
@@ -15,8 +16,13 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 class AndroidHttpClientProvider : HttpClientProvider {
-    override val client by lazy {
-        HttpClient(CIO) {
+    private var _client: HttpClient? = null
+
+    override val client: HttpClient
+        get() = _client ?: createClient()
+
+    private fun createClient(tokenInfo: TokenInfo? = null): HttpClient {
+        return HttpClient(CIO) {
             install(Logging) {
                 level = LogLevel.ALL
                 logger = Logger.ANDROID
@@ -28,16 +34,21 @@ class AndroidHttpClientProvider : HttpClientProvider {
                     }
                 )
             }
+            tokenInfo?.accessToken?.let { accessToken ->
+                install(Auth) {
+                    bearer {
+                        loadTokens {
+                            BearerTokens(accessToken, "")
+                        }
+                    }
+                }
+            }
         }
     }
 
     override fun authClient(tokenInfo: TokenInfo) {
         tokenInfo.accessToken?.let {
-            client.config {
-                install(Auth) {
-                    BearerTokens(tokenInfo.accessToken, tokenInfo.accessToken)
-                }
-            }
+            _client = createClient(tokenInfo)
         }
     }
 }

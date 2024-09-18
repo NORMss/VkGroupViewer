@@ -29,7 +29,10 @@ fun NavGraph(
             AuthScreen(
                 state = state,
                 onAuth = {
-                    viewModel.saveToken()
+                    viewModel.authUser()
+                },
+                onLogOut = {
+                    viewModel.logOut()
                 },
                 setToken = { token ->
                     viewModel.setToken(token)

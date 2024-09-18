@@ -54,6 +54,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.coil.compose)
+
     implementation(libs.androidx.datastore.preferences)
 
     implementation(libs.bundles.ktor)

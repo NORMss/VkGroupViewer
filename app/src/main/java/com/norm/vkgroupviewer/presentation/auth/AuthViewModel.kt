@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.norm.vkgroupviewer.domain.remote.HttpClientProvider
 import com.norm.vkgroupviewer.domain.remote.TokenInfo
+import com.norm.vkgroupviewer.domain.remote.dto.profile_info.ProfileInfo
 import com.norm.vkgroupviewer.usecases.token_info.TokenInfoUseCases
 import com.norm.vkgroupviewer.usecases.vk.GetProfileInfo
 import com.norm.vkgroupviewer.usecases.vk.VkUseCases
@@ -38,13 +39,7 @@ class AuthViewModel @Inject constructor(
                 )
             }
             httpClientProvider.authClient(tokenInfo)
-            vkUseCases.getProfileInfo()
-                .onSuccess {
-                    Log.d("MyLog", "profileInfo: ${it.response.first_name}")
-                }
-                .onError {
-                    Log.d("MyLog", "errorMessage: ${it}")
-                }
+            getInfoProfile()
         }.launchIn(viewModelScope)
     }
 
@@ -57,7 +52,7 @@ class AuthViewModel @Inject constructor(
     }
 
 
-    fun saveToken() {
+    private fun saveToken() {
         viewModelScope.launch {
             tokenInfoUseCases.saveTokenInfo(
                 TokenInfo(
@@ -67,11 +62,38 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    fun authUser(){
+        saveToken()
+        getInfoProfile()
+    }
+
     private fun readToken(): Flow<TokenInfo> {
         return tokenInfoUseCases.readTokenInfo()
     }
 
-    private fun getInfoProfile(): GetProfileInfo {
-        return vkUseCases.getProfileInfo
+    private fun getInfoProfile() {
+        viewModelScope.launch {
+            vkUseCases.getProfileInfo()
+
+                .onSuccess { profileInfo ->
+                    Log.d("MyLog", "profileInfo: ${profileInfo.response.first_name}")
+                    _state.update {
+                        it.copy(
+                            profileInfo = profileInfo
+                        )
+                    }
+                }
+                .onError {
+                    Log.d("MyLog", "errorMessage: ${it}")
+                }
+        }
+    }
+
+    fun logOut() {
+        _state.update {
+            it.copy(
+                profileInfo = null,
+            )
+        }
     }
 }
