@@ -7,5 +7,5 @@ import com.norm.vkgroupviewer.util.Result
 
 interface VkRepository {
     suspend fun getProfileInfo(): Result<ProfileInfo, NetworkError>
-    suspend fun getGroups(id: String): Result<GroupsInfo, NetworkError>
+    suspend fun getGroups(id: Int): Result<GroupsInfo, NetworkError>
 }

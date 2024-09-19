@@ -8,7 +8,7 @@ import com.norm.vkgroupviewer.util.NetworkError
 class GetGroups(
     private val vkRepository: VkRepository,
 ) {
-    suspend operator fun invoke(id: String): Result<GroupsInfo, NetworkError> {
+    suspend operator fun invoke(id: Int): Result<GroupsInfo, NetworkError> {
         return vkRepository.getGroups(id)
     }
 }

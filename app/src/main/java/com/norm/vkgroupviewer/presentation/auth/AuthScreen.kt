@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -17,9 +18,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import coil.compose.AsyncImage
-import com.norm.vkgroupviewer.presentation.Dimens.photo_200
+import com.norm.vkgroupviewer.presentation.Dimens.photoLarge
 import com.norm.vkgroupviewer.presentation.Dimens.smallSpacer
 
 @Composable
@@ -29,6 +31,8 @@ fun AuthScreen(
     onAuth: () -> Unit,
     onLogOut: () -> Unit,
     setToken: (String) -> Unit,
+    setUserIdForGroups: (String) -> Unit,
+    onOpenGroupsScreen: (Int) -> Unit,
 ) {
     Column(
         modifier = modifier,
@@ -74,7 +78,7 @@ fun AuthScreen(
                 model = state.profileInfo.response.photo_200,
                 contentDescription = "photo_200",
                 modifier = Modifier
-                    .size(photo_200)
+                    .size(photoLarge)
                     .clip(CircleShape),
             )
             Spacer(
@@ -97,16 +101,55 @@ fun AuthScreen(
                 modifier = Modifier
                     .height(smallSpacer)
             )
-            Button(onClick = { /*TODO*/ }) {
-                Button(
-                    onClick = {
-                        onLogOut()
-                    }
-                ) {
-                    Text(
-                        text = "Log out"
-                    )
+            Button(
+                onClick = {
+                    onLogOut()
                 }
+            ) {
+                Text(
+                    text = "Log out"
+                )
+            }
+            Spacer(
+                modifier = Modifier
+                    .height(smallSpacer)
+            )
+            TextField(
+                value = state.userIdForGroups.toString() ?: "",
+                onValueChange = { userId ->
+                    setUserIdForGroups(userId)
+                },
+                modifier = Modifier
+                    .fillMaxWidth(0.8f),
+                placeholder = {
+                    Text(
+                        text = "User ID"
+                    )
+                },
+                singleLine = true,
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        onAuth()
+                    },
+                ),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                )
+            )
+            Spacer(
+                modifier = Modifier
+                    .height(smallSpacer)
+            )
+            Button(
+                onClick = {
+                    state.userIdForGroups?.let {
+                        onOpenGroupsScreen(it)
+                    }
+                }
+            ) {
+                Text(
+                    text = "Groups"
+                )
             }
         }
     }

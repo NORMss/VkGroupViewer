@@ -45,7 +45,7 @@ class VkRepositoryImpl(
         }
     }
 
-    override suspend fun getGroups(id: String): Result<GroupsInfo, NetworkError> {
+    override suspend fun getGroups(id: Int): Result<GroupsInfo, NetworkError> {
         val response = httpClientProvider.client.get(
             "https://api.vk.com/method/groups.get"
         ) {

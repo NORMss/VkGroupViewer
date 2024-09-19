@@ -1,6 +1,7 @@
 package com.norm.vkgroupviewer.presentation.auth
 
 import android.util.Log
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.norm.vkgroupviewer.domain.remote.HttpClientProvider
@@ -62,7 +63,7 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun authUser(){
+    fun authUser() {
         saveToken()
         getInfoProfile()
     }
@@ -79,12 +80,13 @@ class AuthViewModel @Inject constructor(
                     Log.d("MyLog", "profileInfo: ${profileInfo.response.first_name}")
                     _state.update {
                         it.copy(
-                            profileInfo = profileInfo
+                            profileInfo = profileInfo,
+                            userIdForGroups = profileInfo.response.id,
                         )
                     }
                 }
-                .onError {
-                    Log.d("MyLog", "errorMessage: ${it}")
+                .onError { errorMessage ->
+                    Log.d("MyLog", "errorMessage: ${errorMessage.name}")
                 }
         }
     }
@@ -94,6 +96,16 @@ class AuthViewModel @Inject constructor(
             it.copy(
                 profileInfo = null,
             )
+        }
+    }
+
+    fun setUserIdForGroups(userId: String) {
+        if (userId.isDigitsOnly()) {
+            _state.update {
+                it.copy(
+                    userIdForGroups = userId.toInt(),
+                )
+            }
         }
     }
 }

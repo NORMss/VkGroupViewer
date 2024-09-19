@@ -5,7 +5,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed class Route {
     @Serializable
-    data object AuthScreen: Route()
+    data object AuthScreen : Route()
+
     @Serializable
-    data object GroupsScreen: Route()
+    data class GroupsScreen(val userId: Int) : Route()
 }
