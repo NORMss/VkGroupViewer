@@ -1,15 +1,18 @@
 package com.norm.vkgroupviewer.presentation.groups
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.norm.vkgroupviewer.domain.remote.dto.groups_info.GroupsInfo
+import com.norm.vkgroupviewer.presentation.Dimens.largeSpacer
+import com.norm.vkgroupviewer.presentation.Dimens.mediumSpacer
 import com.norm.vkgroupviewer.presentation.componets.GroupCard
 
 @Composable
@@ -24,7 +27,9 @@ fun GroupsScreen(
         ) {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .padding(horizontal = largeSpacer),
+                verticalArrangement = Arrangement.spacedBy(mediumSpacer)
             ) {
                 items(
                     items = state.groupsInfo.response.items,
