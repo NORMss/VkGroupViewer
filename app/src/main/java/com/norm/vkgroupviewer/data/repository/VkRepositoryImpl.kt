@@ -12,6 +12,8 @@ import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.serialization.SerializationException
 import com.norm.vkgroupviewer.util.Result
 import io.ktor.client.HttpClient
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.jsonObject
 
 class VkRepositoryImpl(
     private val httpClientProvider: HttpClientProvider,
@@ -31,6 +33,18 @@ class VkRepositoryImpl(
         }
         return when (response.status.value) {
             in 200..299 -> {
+                val responseBody = response.body<JsonObject>()
+
+                if (responseBody.containsKey("error")) {
+                    val error = responseBody["error"]!!.jsonObject
+                    val errorCode = error["error_code"]!!.toString().toInt()
+
+                    return when (errorCode) {
+                        5 -> Result.Error(NetworkError.UNAUTHORIZED)
+                        else -> Result.Error(NetworkError.API_ERROR)
+                    }
+                }
+
                 val profileInfo = response.body<ProfileInfo>()
                 Result.Success(profileInfo)
             }

@@ -1,5 +1,7 @@
 package com.norm.vkgroupviewer.presentation.groups
 
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -39,6 +41,13 @@ class GroupsViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun openGroupFromVk(id: String) {
+        val webPage = Uri.parse("https://vk.com/$id").let { webpage ->
+            Intent(Intent.ACTION_VIEW, webpage)
+        }
+        //startActivity(webPage)
     }
 
     fun setUserId(userId: Int) {

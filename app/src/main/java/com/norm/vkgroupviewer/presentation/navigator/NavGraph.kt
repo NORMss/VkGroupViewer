@@ -1,7 +1,10 @@
 package com.norm.vkgroupviewer.presentation.navigator
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -11,15 +14,13 @@ import com.norm.vkgroupviewer.presentation.auth.AuthScreen
 import com.norm.vkgroupviewer.presentation.auth.AuthViewModel
 import com.norm.vkgroupviewer.presentation.groups.GroupsScreen
 import com.norm.vkgroupviewer.presentation.groups.GroupsViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.joinAll
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 
 @Composable
 fun NavGraph(
     startDestination: Route,
 ) {
+    val context = LocalContext.current
+
     val navController = rememberNavController()
 
     NavHost(
@@ -39,6 +40,9 @@ fun NavGraph(
                 },
                 setToken = { token ->
                     viewModel.setToken(token)
+                },
+                clearError = {
+                    viewModel.clearError()
                 },
                 setUserIdForGroups = { userId ->
                     viewModel.setUserIdForGroups(userId)
@@ -61,7 +65,11 @@ fun NavGraph(
             GroupsScreen(
                 state = state,
                 onClick = {
-
+//                    viewModel.openGroupFromVk(it)
+                    val webPage = Uri.parse("https://vk.com/$it").let { webpage ->
+                        Intent(Intent.ACTION_VIEW, webpage)
+                    }
+                    context.startActivity(webPage)
                 },
             )
         }

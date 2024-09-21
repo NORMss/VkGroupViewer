@@ -1,5 +1,6 @@
 package com.norm.vkgroupviewer.data.remote
 
+import android.util.Log
 import com.norm.vkgroupviewer.domain.remote.HttpClientProvider
 import com.norm.vkgroupviewer.domain.remote.TokenInfo
 import io.ktor.client.HttpClient
@@ -38,7 +39,7 @@ class AndroidHttpClientProvider : HttpClientProvider {
                 install(Auth) {
                     bearer {
                         loadTokens {
-                            BearerTokens(accessToken, "")
+                            BearerTokens(accessToken.trim(), "")
                         }
                     }
                 }

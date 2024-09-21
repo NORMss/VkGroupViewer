@@ -14,6 +14,6 @@ data class Item(
     val photo_100: String,
     val photo_200: String,
     val photo_50: String,
-    val screen_name: String,
-    val type: String
+    val screen_name: String? = null,
+    val type: String,
 )

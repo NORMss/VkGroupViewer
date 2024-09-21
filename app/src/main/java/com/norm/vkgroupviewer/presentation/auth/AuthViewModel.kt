@@ -10,6 +10,7 @@ import com.norm.vkgroupviewer.domain.remote.dto.profile_info.ProfileInfo
 import com.norm.vkgroupviewer.usecases.token_info.TokenInfoUseCases
 import com.norm.vkgroupviewer.usecases.vk.GetProfileInfo
 import com.norm.vkgroupviewer.usecases.vk.VkUseCases
+import com.norm.vkgroupviewer.util.NetworkError
 import com.norm.vkgroupviewer.util.onError
 import com.norm.vkgroupviewer.util.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,10 +35,8 @@ class AuthViewModel @Inject constructor(
 
     init {
         readToken().onEach { tokenInfo ->
-            _state.update {
-                it.copy(
-                    token = tokenInfo.accessToken
-                )
+            tokenInfo.accessToken?.let {
+                setToken(it)
             }
             httpClientProvider.authClient(tokenInfo)
             getInfoProfile()
@@ -53,31 +52,18 @@ class AuthViewModel @Inject constructor(
     }
 
 
-    private fun saveToken() {
-        viewModelScope.launch {
-            tokenInfoUseCases.saveTokenInfo(
-                TokenInfo(
-                    accessToken = _state.value.token
-                )
+    private suspend fun saveToken() {
+        tokenInfoUseCases.saveTokenInfo(
+            TokenInfo(
+                accessToken = _state.value.token
             )
-        }
-    }
-
-    fun authUser() {
-        saveToken()
-        getInfoProfile()
-    }
-
-    private fun readToken(): Flow<TokenInfo> {
-        return tokenInfoUseCases.readTokenInfo()
+        )
     }
 
     private fun getInfoProfile() {
         viewModelScope.launch {
             vkUseCases.getProfileInfo()
-
                 .onSuccess { profileInfo ->
-                    Log.d("MyLog", "profileInfo: ${profileInfo.response.first_name}")
                     _state.update {
                         it.copy(
                             profileInfo = profileInfo,
@@ -86,10 +72,49 @@ class AuthViewModel @Inject constructor(
                     }
                 }
                 .onError { errorMessage ->
-                    Log.d("MyLog", "errorMessage: ${errorMessage.name}")
+                    _state.update {
+                        it.copy(
+                            errorMessage = setErrorMessage(errorMessage)
+                        )
+                    }
                 }
         }
     }
+
+    fun clearError() {
+        _state.update {
+            it.copy(
+                errorMessage = null,
+            )
+        }
+    }
+
+    fun authUser() {
+        viewModelScope.launch {
+            saveToken()
+            getInfoProfile()
+        }
+    }
+
+    private fun readToken(): Flow<TokenInfo> {
+        return tokenInfoUseCases.readTokenInfo()
+    }
+
+    private fun setErrorMessage(networkError: NetworkError): String {
+        return when (networkError) {
+            NetworkError.REQUEST_TIMEOUT -> "Request timed out. Try again."
+            NetworkError.UNAUTHORIZED -> "Check your credentials."
+            NetworkError.CONFLICT -> "Resource conflict occurred."
+            NetworkError.TOO_MANY_REQUESTS -> "Too many requests. Wait and retry."
+            NetworkError.API_ERROR -> "API error. Try again."
+            NetworkError.NO_INTERNET -> "No internet connection."
+            NetworkError.PAYLOAD_TOO_LARGE -> "Payload is too large."
+            NetworkError.SERVER_ERROR -> "Server error. Try later."
+            NetworkError.SERIALIZATION -> "Data error. Report this issue."
+            NetworkError.UNKNOWN -> "Unknown error. Try again."
+        }
+    }
+
 
     fun logOut() {
         _state.update {

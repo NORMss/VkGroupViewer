@@ -19,7 +19,7 @@ import com.norm.vkgroupviewer.presentation.componets.GroupCard
 fun GroupsScreen(
     modifier: Modifier = Modifier,
     state: GroupsState,
-    onClick: (Int) -> Unit,
+    onClick: (String) -> Unit,
 ) {
     if (state.groupsInfo != null) {
         Column(
@@ -43,7 +43,7 @@ fun GroupsScreen(
                         screenName = group.screen_name,
                         image = group.photo_50,
                         onClick = {
-                            onClick(group.id)
+                            onClick(group.screen_name ?: group.id.toString())
                         }
                     )
                 }
