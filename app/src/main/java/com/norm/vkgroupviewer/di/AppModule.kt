@@ -1,6 +1,7 @@
 package com.norm.vkgroupviewer.di
 
 import android.app.Application
+import android.content.Context
 import com.norm.vkgroupviewer.data.manager.LocalUserManagerImpl
 import com.norm.vkgroupviewer.data.remote.AndroidHttpClientProvider
 import com.norm.vkgroupviewer.data.repository.VkRepositoryImpl

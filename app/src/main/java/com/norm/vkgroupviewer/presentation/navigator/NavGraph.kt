@@ -65,12 +65,14 @@ fun NavGraph(
             GroupsScreen(
                 state = state,
                 onClick = {
-//                    viewModel.openGroupFromVk(it)
                     val webPage = Uri.parse("https://vk.com/$it").let { webpage ->
                         Intent(Intent.ACTION_VIEW, webpage)
                     }
                     context.startActivity(webPage)
                 },
+                onRefresh = {
+                    viewModel.refreshVkGroups()
+                }
             )
         }
     }

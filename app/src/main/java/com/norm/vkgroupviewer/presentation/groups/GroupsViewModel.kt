@@ -30,15 +30,11 @@ class GroupsViewModel @Inject constructor(
         _state.onEach { state ->
             state.userId?.let { userId ->
                 Log.d("MyLog", "getUserId: $userId")
+                setStatusLoadingGroups(true)
                 viewModelScope.launch {
-                    vkUseCases.getGroups(userId)
-                        .onSuccess { groupsInfo ->
-                            setGroupsInfo(groupsInfo)
-                        }
-                        .onError { errorMessage ->
-                            setErrorMessage(errorMessage.name)
-                        }
-                }
+                    getVkGroups(userId)
+                }.join()
+                setStatusLoadingGroups(false)
             }
         }.launchIn(viewModelScope)
     }
@@ -71,6 +67,32 @@ class GroupsViewModel @Inject constructor(
             it.copy(
                 errorMessage = errorMessage,
             )
+        }
+    }
+
+    private fun setStatusLoadingGroups(isLoadingGroups: Boolean) {
+        _state.update {
+            it.copy(
+                isLoadingGroups = isLoadingGroups,
+            )
+        }
+    }
+
+    private suspend fun getVkGroups(userId: Int) {
+        vkUseCases.getGroups(userId)
+            .onSuccess { groupsInfo ->
+                setGroupsInfo(groupsInfo)
+            }
+            .onError { errorMessage ->
+                setErrorMessage(errorMessage.name)
+            }
+    }
+
+    fun refreshVkGroups() {
+        _state.value.userId?.let {
+            viewModelScope.launch {
+                getVkGroups(it)
+            }
         }
     }
 }
