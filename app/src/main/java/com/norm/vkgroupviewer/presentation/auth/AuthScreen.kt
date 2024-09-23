@@ -136,7 +136,7 @@ fun AuthScreen(
                     .height(smallSpacer)
             )
             TextField(
-                value = state.userIdForGroups.toString() ?: "",
+                value = state.userIdForGroups?.toString() ?: "",
                 onValueChange = { userId ->
                     setUserIdForGroups(userId)
                 },

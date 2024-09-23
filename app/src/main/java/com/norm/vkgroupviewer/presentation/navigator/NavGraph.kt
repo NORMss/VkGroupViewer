@@ -65,9 +65,7 @@ fun NavGraph(
             GroupsScreen(
                 state = state,
                 onClick = {
-                    val webPage = Uri.parse("https://vk.com/$it").let { webpage ->
-                        Intent(Intent.ACTION_VIEW, webpage)
-                    }
+                    val webPage = Intent(Intent.ACTION_VIEW, Uri.parse("https://vk.com/$it"))
                     context.startActivity(webPage)
                 },
                 onRefresh = {

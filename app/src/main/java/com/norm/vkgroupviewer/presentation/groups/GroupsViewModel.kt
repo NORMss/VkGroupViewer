@@ -29,7 +29,6 @@ class GroupsViewModel @Inject constructor(
     init {
         _state.onEach { state ->
             state.userId?.let { userId ->
-                Log.d("MyLog", "getUserId: $userId")
                 setStatusLoadingGroups(true)
                 viewModelScope.launch {
                     getVkGroups(userId)
@@ -89,11 +88,14 @@ class GroupsViewModel @Inject constructor(
     }
 
     fun refreshVkGroups() {
+        setStatusLoadingGroups(true)
         _state.value.userId?.let {
             viewModelScope.launch {
                 getVkGroups(it)
             }
         }
+        Log.d("MyLog", "setStatusLoadingGroups(false)")
+        setStatusLoadingGroups(false)
     }
 }
 

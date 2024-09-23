@@ -128,7 +128,7 @@ class AuthViewModel @Inject constructor(
         if (userId.isDigitsOnly()) {
             _state.update {
                 it.copy(
-                    userIdForGroups = userId.toInt(),
+                    userIdForGroups = userId.toIntOrNull(),
                 )
             }
         }

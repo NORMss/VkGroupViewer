@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class Response(
     val count: Int,
     val items: List<Item>,
-    val last_updated_time: Int
+    val last_updated_time: Int? = null,
 )
