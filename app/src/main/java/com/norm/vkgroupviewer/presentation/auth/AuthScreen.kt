@@ -13,8 +13,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -41,7 +46,9 @@ fun AuthScreen(
     clearError: () -> Unit,
     setToken: (String) -> Unit,
     setUserIdForGroups: (String) -> Unit,
+    setUserScreenNameForGroups: (String) -> Unit,
     onOpenGroupsScreen: (Int) -> Unit,
+    convertToId: () -> Unit,
 ) {
     val context = LocalContext.current
     Column(
@@ -156,6 +163,36 @@ fun AuthScreen(
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                 )
+            )
+            Spacer(
+                modifier = Modifier
+                    .height(smallSpacer)
+            )
+            TextField(
+                value = state.userScreenNameForGroups ?: "",
+                onValueChange = { userId ->
+                    setUserScreenNameForGroups(userId)
+                },
+                modifier = Modifier
+                    .fillMaxWidth(0.8f),
+                placeholder = {
+                    Text(
+                        text = "User Screen Name"
+                    )
+                },
+                singleLine = true,
+                trailingIcon = {
+                    IconButton(
+                        onClick = {
+                            convertToId()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = null,
+                        )
+                    }
+                },
             )
             Spacer(
                 modifier = Modifier

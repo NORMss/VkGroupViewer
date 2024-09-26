@@ -13,6 +13,8 @@ import com.norm.vkgroupviewer.usecases.token_info.SaveTokenInfo
 import com.norm.vkgroupviewer.usecases.token_info.TokenInfoUseCases
 import com.norm.vkgroupviewer.usecases.vk.GetGroups
 import com.norm.vkgroupviewer.usecases.vk.GetProfileInfo
+import com.norm.vkgroupviewer.usecases.vk.GetUsersInfo
+import com.norm.vkgroupviewer.usecases.vk.ResolveScreenName
 import com.norm.vkgroupviewer.usecases.vk.VkUseCases
 import dagger.Module
 import dagger.Provides
@@ -66,6 +68,8 @@ object AppModule {
         return VkUseCases(
             getProfileInfo = GetProfileInfo(vkRepository),
             getGroups = GetGroups(vkRepository),
+            getUsersInfo = GetUsersInfo(vkRepository),
+            resolveScreenName = ResolveScreenName(vkRepository),
         )
     }
 }

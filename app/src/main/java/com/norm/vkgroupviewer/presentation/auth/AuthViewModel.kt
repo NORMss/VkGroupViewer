@@ -1,14 +1,11 @@
 package com.norm.vkgroupviewer.presentation.auth
 
-import android.util.Log
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.norm.vkgroupviewer.domain.remote.HttpClientProvider
 import com.norm.vkgroupviewer.domain.remote.TokenInfo
-import com.norm.vkgroupviewer.domain.remote.dto.profile_info.ProfileInfo
 import com.norm.vkgroupviewer.usecases.token_info.TokenInfoUseCases
-import com.norm.vkgroupviewer.usecases.vk.GetProfileInfo
 import com.norm.vkgroupviewer.usecases.vk.VkUseCases
 import com.norm.vkgroupviewer.util.NetworkError
 import com.norm.vkgroupviewer.util.onError
@@ -68,6 +65,7 @@ class AuthViewModel @Inject constructor(
                         it.copy(
                             profileInfo = profileInfo,
                             userIdForGroups = profileInfo.response.id,
+                            userScreenNameForGroups = profileInfo.response.screen_name
                         )
                     }
                 }
@@ -125,12 +123,61 @@ class AuthViewModel @Inject constructor(
     }
 
     fun setUserIdForGroups(userId: String) {
-        if (userId.isDigitsOnly()) {
-            _state.update {
-                it.copy(
-                    userIdForGroups = userId.toIntOrNull(),
-                )
+        _state.update {
+            it.copy(
+                userIdForGroups = userId.toIntOrNull(),
+            )
+        }
+    }
+
+    fun setUserScreenNameForGroups(screenName: String) {
+        _state.update {
+            it.copy(
+                userScreenNameForGroups = screenName,
+            )
+        }
+    }
+
+    fun getIdIfScreenName() {
+        val screenName =
+            _state.value.userScreenNameForGroups ?: _state.value.userIdForGroups.toString()
+        when {
+            isScreenName(screenName) -> {
+                viewModelScope.launch {
+                    vkUseCases.resolveScreenName(screenName)
+                        .onSuccess { userScreenName ->
+                            _state.update {
+                                it.copy(
+                                    userIdForGroups = userScreenName.response.object_id,
+                                )
+                            }
+                        }
+                        .onError { errorMessage ->
+                            _state.update {
+                                it.copy(
+                                    errorMessage = setErrorMessage(errorMessage),
+                                )
+                            }
+                        }
+                }
+            }
+
+            screenName.isDigitsOnly() -> {
+                return
+            }
+
+            else -> {
+                _state.update {
+                    it.copy(
+                        errorMessage = "Invalid user ID"
+                    )
+                }
             }
         }
+    }
+
+    private fun isScreenName(screenName: String): Boolean {
+        val regex = """^(?!\d{3,})(?!_)(?!.*_$)(?!.*\.\w{0,3})(?!.*__)[a-z0-9_]+$""".toRegex()
+        return regex.matches(screenName)
     }
 }

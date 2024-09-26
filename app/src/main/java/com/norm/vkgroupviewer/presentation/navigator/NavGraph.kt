@@ -47,10 +47,16 @@ fun NavGraph(
                 setUserIdForGroups = { userId ->
                     viewModel.setUserIdForGroups(userId)
                 },
+                setUserScreenNameForGroups = { screenName ->
+                    viewModel.setUserScreenNameForGroups(screenName)
+                },
                 onOpenGroupsScreen = { userId ->
                     navController.navigate(
                         Route.GroupsScreen(userId)
                     )
+                },
+                convertToId = { ->
+                    viewModel.getIdIfScreenName()
                 }
             )
         }
