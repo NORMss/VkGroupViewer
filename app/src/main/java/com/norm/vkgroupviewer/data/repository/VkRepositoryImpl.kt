@@ -1,6 +1,7 @@
 package com.norm.vkgroupviewer.data.repository
 
 import com.norm.vkgroupviewer.domain.remote.HttpClientProvider
+import com.norm.vkgroupviewer.domain.remote.dto.friends_info.FriendsInfo
 import com.norm.vkgroupviewer.domain.remote.dto.groups_info.GroupsInfo
 import com.norm.vkgroupviewer.domain.remote.dto.profile_info.ProfileInfo
 import com.norm.vkgroupviewer.domain.remote.dto.user_screen_name.UserScreenName
@@ -108,7 +109,7 @@ class VkRepositoryImpl(
         }
     }
 
-    override suspend fun resolveScreenName(screenName: String): Result<UserScreenName,NetworkError>{
+    override suspend fun resolveScreenName(screenName: String): Result<UserScreenName, NetworkError> {
         val response = httpClientProvider.client.get(
             "https://api.vk.com/method/utils.resolveScreenName"
         ) {
@@ -119,6 +120,30 @@ class VkRepositoryImpl(
             in 200..299 -> {
                 val groupsInfo = response.body<UserScreenName>()
                 Result.Success(groupsInfo)
+            }
+
+            401 -> Result.Error(NetworkError.UNAUTHORIZED)
+            409 -> Result.Error(NetworkError.CONFLICT)
+            413 -> Result.Error(NetworkError.PAYLOAD_TOO_LARGE)
+            408 -> Result.Error(NetworkError.REQUEST_TIMEOUT)
+
+            in 500..599 -> Result.Error(NetworkError.SERVER_ERROR)
+            else -> Result.Error(NetworkError.UNKNOWN)
+        }
+    }
+
+    override suspend fun getFriends(id: Int, fields: String): Result<FriendsInfo, NetworkError> {
+        val response = httpClientProvider.client.get(
+            "https://api.vk.com/method/friends.get"
+        ) {
+            parameter("v", VK_API_VERSION)
+            parameter("user_id", id)
+            parameter("fields", fields)
+        }
+        return when (response.status.value) {
+            in 200..299 -> {
+                val friendsInfo = response.body<FriendsInfo>()
+                Result.Success(friendsInfo)
             }
 
             401 -> Result.Error(NetworkError.UNAUTHORIZED)

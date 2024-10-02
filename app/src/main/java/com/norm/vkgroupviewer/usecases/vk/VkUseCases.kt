@@ -5,4 +5,5 @@ data class VkUseCases(
     val getGroups: GetGroups,
     val getUsersInfo: GetUsersInfo,
     val resolveScreenName: ResolveScreenName,
+    val getFriends: GetFriends,
 )
