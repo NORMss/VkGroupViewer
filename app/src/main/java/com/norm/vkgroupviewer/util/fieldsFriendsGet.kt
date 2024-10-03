@@ -1,5 +1,25 @@
 package com.norm.vkgroupviewer.util
 
-enum class FieldsFriendsGet {
-
+enum class FieldsFriendsGet(val fieldName: String) {
+    BDATE("bdate"),
+    CAN_POST("can_post"),
+    CAN_SEE_ALL_POSTS("can_see_all_posts"),
+    CAN_WRITE_PRIVATE_MESSAGE("can_write_private_message"),
+    CITY("city"),
+    CONTACTS("contacts"),
+    COUNTRY("country"),
+    DOMAIN("domain"),
+    EDUCATION("education"),
+    HAS_MOBILE("has_mobile"),
+    TIMEZONE("timezone"),
+    LAST_SEEN("last_seen"),
+    NICKNAME("nickname"),
+    ONLINE("online"),
+    PHOTO_100("photo_100"),
+    PHOTO_200_ORIG("photo_200_orig"),
+    PHOTO_50("photo_50"),
+    RELATION("relation"),
+    SEX("sex"),
+    STATUS("status"),
+    UNIVERSITIES("universities"),
 }

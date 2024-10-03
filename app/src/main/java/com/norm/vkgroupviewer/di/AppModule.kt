@@ -11,6 +11,7 @@ import com.norm.vkgroupviewer.domain.repository.VkRepository
 import com.norm.vkgroupviewer.usecases.token_info.ReadTokenInfo
 import com.norm.vkgroupviewer.usecases.token_info.SaveTokenInfo
 import com.norm.vkgroupviewer.usecases.token_info.TokenInfoUseCases
+import com.norm.vkgroupviewer.usecases.vk.GetFriends
 import com.norm.vkgroupviewer.usecases.vk.GetGroups
 import com.norm.vkgroupviewer.usecases.vk.GetProfileInfo
 import com.norm.vkgroupviewer.usecases.vk.GetUsersInfo
@@ -69,7 +70,8 @@ object AppModule {
             getProfileInfo = GetProfileInfo(vkRepository),
             getGroups = GetGroups(vkRepository),
             getUsersInfo = GetUsersInfo(vkRepository),
-            resolveScreenName = ResolveScreenName(vkRepository),
+            getFriends = GetFriends(vkRepository),
+            resolveScreenName = ResolveScreenName(vkRepository)
         )
     }
 }
