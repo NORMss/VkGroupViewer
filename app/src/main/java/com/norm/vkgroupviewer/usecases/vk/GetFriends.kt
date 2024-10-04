@@ -8,7 +8,7 @@ import com.norm.vkgroupviewer.util.NetworkError
 class GetFriends(
     private val vkRepository: VkRepository,
 ) {
-    suspend operator fun invoke(id: Int, fields: String): Result<FriendsInfo, NetworkError> {
+    suspend operator fun invoke(id: Int, fields: String?): Result<FriendsInfo, NetworkError> {
         return vkRepository.getFriends(id, fields)
     }
 }

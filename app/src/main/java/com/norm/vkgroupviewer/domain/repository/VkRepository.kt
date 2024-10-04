@@ -13,5 +13,5 @@ interface VkRepository {
     suspend fun getGroups(id: Int): Result<GroupsInfo, NetworkError>
     suspend fun getUsersInfoByIds(ids: String): Result<UsersInfo, NetworkError>
     suspend fun resolveScreenName(screenName: String): Result<UserScreenName, NetworkError>
-    suspend fun getFriends(id: Int, fields: String): Result<FriendsInfo, NetworkError>
+    suspend fun getFriends(id: Int, fields: String?): Result<FriendsInfo, NetworkError>
 }

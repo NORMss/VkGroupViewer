@@ -2,16 +2,22 @@ package com.norm.vkgroupviewer.presentation.navigator
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.norm.vkgroupviewer.presentation.Dimens.largeSpacer
 import com.norm.vkgroupviewer.presentation.auth.AuthScreen
 import com.norm.vkgroupviewer.presentation.auth.AuthViewModel
+import com.norm.vkgroupviewer.presentation.friendlist.FriendListScreen
+import com.norm.vkgroupviewer.presentation.friendlist.FriendsViewModel
 import com.norm.vkgroupviewer.presentation.groups.GroupsScreen
 import com.norm.vkgroupviewer.presentation.groups.GroupsViewModel
 
@@ -77,6 +83,21 @@ fun NavGraph(
                 onRefresh = {
                     viewModel.refreshVkGroups()
                 }
+            )
+        }
+        composable<Route.FriendListScreen> { backStackEntry ->
+            val viewModel = hiltViewModel<FriendsViewModel>()
+            val state = viewModel.state.collectAsState().value
+            backStackEntry.toRoute<Route.GroupsScreen>().let { authScreen ->
+                viewModel.setUserId(
+                    authScreen.userId
+                )
+            }
+            FriendListScreen(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(largeSpacer),
+                state = state,
             )
         }
     }

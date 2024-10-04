@@ -132,7 +132,7 @@ class VkRepositoryImpl(
         }
     }
 
-    override suspend fun getFriends(id: Int, fields: String): Result<FriendsInfo, NetworkError> {
+    override suspend fun getFriends(id: Int, fields: String?): Result<FriendsInfo, NetworkError> {
         val response = httpClientProvider.client.get(
             "https://api.vk.com/method/friends.get"
         ) {

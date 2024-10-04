@@ -9,4 +9,7 @@ sealed class Route {
 
     @Serializable
     data class GroupsScreen(val userId: Int) : Route()
+
+    @Serializable
+    data class FriendListScreen(val userId: Int) : Route()
 }

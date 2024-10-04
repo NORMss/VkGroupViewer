@@ -16,7 +16,7 @@ import com.norm.vkgroupviewer.presentation.Dimens.mediumSpacer
 @Composable
 fun FriendListScreen(
     modifier: Modifier = Modifier,
-    friendsInfo: FriendsInfo,
+    state: FriendsState,
 ) {
     Column(modifier = modifier) {
         LazyColumn(
@@ -25,15 +25,17 @@ fun FriendListScreen(
                 .padding(largeSpacer),
             verticalArrangement = Arrangement.spacedBy(mediumSpacer),
         ) {
-            items(
-                items = friendsInfo.response.items,
-                key = { user ->
-                    user.id
+            state.friendsInfo?.let { friendsInfo ->
+                items(
+                    items = friendsInfo.response.items,
+                    key = { user ->
+                        user.id
+                    }
+                ) { user ->
+                    Text(
+                        text = user.first_name,
+                    )
                 }
-            ) { user ->
-                Text(
-                    text = user.first_name,
-                )
             }
         }
     }
