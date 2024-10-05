@@ -56,6 +56,11 @@ fun NavGraph(
                 setUserScreenNameForGroups = { screenName ->
                     viewModel.setUserScreenNameForGroups(screenName)
                 },
+                onOpenFriendList = { userId ->
+                    navController.navigate(
+                        Route.FriendListScreen(userId)
+                    )
+                },
                 onOpenGroupsScreen = { userId ->
                     navController.navigate(
                         Route.GroupsScreen(userId)
@@ -63,7 +68,7 @@ fun NavGraph(
                 },
                 convertToId = { ->
                     viewModel.getIdIfScreenName()
-                }
+                },
             )
         }
         composable<Route.GroupsScreen> { backStackEntry ->

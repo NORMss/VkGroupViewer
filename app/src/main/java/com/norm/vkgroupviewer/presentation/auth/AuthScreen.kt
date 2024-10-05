@@ -48,6 +48,7 @@ fun AuthScreen(
     setUserIdForGroups: (String) -> Unit,
     setUserScreenNameForGroups: (String) -> Unit,
     onOpenGroupsScreen: (Int) -> Unit,
+    onOpenFriendList: (Int) -> Unit,
     convertToId: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -207,6 +208,21 @@ fun AuthScreen(
             ) {
                 Text(
                     text = "Groups"
+                )
+            }
+            Spacer(
+                modifier = Modifier
+                    .height(smallSpacer)
+            )
+            Button(
+                onClick = {
+                    state.userIdForGroups?.let {
+                        onOpenFriendList(it)
+                    }
+                }
+            ) {
+                Text(
+                    text = "Friends"
                 )
             }
         }

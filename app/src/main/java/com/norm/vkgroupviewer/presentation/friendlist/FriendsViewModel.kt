@@ -6,14 +6,17 @@ import com.norm.vkgroupviewer.usecases.vk.VkUseCases
 import com.norm.vkgroupviewer.util.FieldsFriendsGet
 import com.norm.vkgroupviewer.util.onError
 import com.norm.vkgroupviewer.util.onSuccess
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class FriendsViewModel @Inject constructor(
     private val vkUseCases: VkUseCases,
 ) : ViewModel() {
@@ -32,7 +35,7 @@ class FriendsViewModel @Inject constructor(
                     getFriends(userId, _state.value.fields)
                 }.join()
             }
-        }
+        }.launchIn(viewModelScope)
     }
 
     fun setUserId(userId: Int) {
