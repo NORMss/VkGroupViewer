@@ -12,17 +12,19 @@ import androidx.compose.ui.Modifier
 import com.norm.vkgroupviewer.domain.remote.dto.friends_info.FriendsInfo
 import com.norm.vkgroupviewer.presentation.Dimens.largeSpacer
 import com.norm.vkgroupviewer.presentation.Dimens.mediumSpacer
+import com.norm.vkgroupviewer.presentation.componets.FriendCard
 
 @Composable
 fun FriendListScreen(
     modifier: Modifier = Modifier,
     state: FriendsState,
+    onClick: (String) -> Unit,
 ) {
     Column(modifier = modifier) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(largeSpacer),
+                .padding(horizontal = largeSpacer),
             verticalArrangement = Arrangement.spacedBy(mediumSpacer),
         ) {
             state.friendsInfo?.let { friendsInfo ->
@@ -32,8 +34,13 @@ fun FriendListScreen(
                         user.id
                     }
                 ) { user ->
-                    Text(
-                        text = user.first_name,
+                    FriendCard(
+                        name = " ${user.first_name} ${user.last_name}",
+                        image = user.photo_100,
+                        screenName = user.domain,
+                        onClick = {
+                            onClick(user.domain ?: "")
+                        },
                     )
                 }
             }

@@ -26,7 +26,7 @@ class FriendsViewModel @Inject constructor(
     init {
         _state.update {
             it.copy(
-                fields = "${FieldsFriendsGet.PHOTO_100},${FieldsFriendsGet.NICKNAME}"
+                fields = "${FieldsFriendsGet.PHOTO_100},${FieldsFriendsGet.NICKNAME},${FieldsFriendsGet.DOMAIN}"
             )
         }
         _state.onEach { state ->

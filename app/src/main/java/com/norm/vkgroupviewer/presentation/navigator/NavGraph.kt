@@ -100,9 +100,12 @@ fun NavGraph(
             }
             FriendListScreen(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(largeSpacer),
+                    .fillMaxSize(),
                 state = state,
+                onClick = {
+                    val webPage = Intent(Intent.ACTION_VIEW, Uri.parse("https://vk.com/$it"))
+                    context.startActivity(webPage)
+                }
             )
         }
     }

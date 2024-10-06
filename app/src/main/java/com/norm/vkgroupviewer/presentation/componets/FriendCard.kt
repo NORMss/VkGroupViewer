@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import com.norm.vkgroupviewer.presentation.Dimens.mediumSpacer
 import com.norm.vkgroupviewer.presentation.Dimens.photoMedium
@@ -29,11 +29,10 @@ import com.norm.vkgroupviewer.presentation.Dimens.roundedSmale
 import com.norm.vkgroupviewer.presentation.Dimens.smallSpacer
 
 @Composable
-fun GroupCard(
+fun FriendCard(
     image: String? = null,
     name: String,
-    domain: String? = null,
-    type: String,
+    screenName: String? = null,
     onClick: () -> Unit,
 ) {
     Card(
@@ -46,7 +45,7 @@ fun GroupCard(
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .padding(mediumSpacer),
             horizontalArrangement = Arrangement.Start,
         ) {
@@ -76,9 +75,9 @@ fun GroupCard(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
-                domain?.let {
+                screenName?.let {
                     Text(
-                        text = "@$domain",
+                        text = "@$screenName",
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier
                             .background(
@@ -90,58 +89,6 @@ fun GroupCard(
                     )
                 }
             }
-            Text(
-                text = type,
-                modifier = Modifier
-                    .align(Alignment.Bottom),
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-            )
         }
     }
-}
-
-@Preview
-@Composable
-private fun PreviewGroupCardFullInfo(
-
-) {
-    GroupCard(
-        name = "Test Group",
-        domain = "testgroup",
-        type = "group",
-        image = "https://upload.wikimedia.org/wikipedia/commons/d/de/Color-Green.JPG",
-        onClick = {
-
-        }
-    )
-}
-
-@Preview
-@Composable
-private fun PreviewGroupCardNoImage(
-
-) {
-    GroupCard(
-        name = "Test Group",
-        domain = "testgroup",
-        type = "group",
-        onClick = {
-
-        }
-    )
-}
-
-@Preview
-@Composable
-private fun PreviewGroupCardNoImageNoScreeName(
-
-) {
-    GroupCard(
-        name = "Test Group",
-        type = "group",
-        onClick = {
-
-        }
-    )
 }

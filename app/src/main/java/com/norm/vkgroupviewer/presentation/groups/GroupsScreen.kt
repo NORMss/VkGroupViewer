@@ -116,7 +116,7 @@ fun GroupsScreen(
                         GroupCard(
                             name = group.name,
                             type = group.type,
-                            screenName = group.screen_name,
+                            domain = group.screen_name,
                             image = group.photo_50,
                             onClick = {
                                 onClick(group.screen_name ?: group.id.toString())
