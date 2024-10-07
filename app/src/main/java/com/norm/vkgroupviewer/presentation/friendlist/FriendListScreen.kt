@@ -18,6 +18,8 @@ import com.norm.vkgroupviewer.presentation.componets.FriendCard
 fun FriendListScreen(
     modifier: Modifier = Modifier,
     state: FriendsState,
+    showOrHideMoreInfo: (Int) -> Unit,
+    onCopyId: (String) -> Unit,
     onClick: (String) -> Unit,
 ) {
     Column(modifier = modifier) {
@@ -35,9 +37,17 @@ fun FriendListScreen(
                     }
                 ) { user ->
                     FriendCard(
+                        userId = user.id.toString(),
                         name = " ${user.first_name} ${user.last_name}",
                         image = user.photo_100,
                         screenName = user.domain,
+                        isMoreInfo = state.showMoreInfo[user.id]!!,
+                        showOrHideMoreInfo = {
+                            showOrHideMoreInfo(user.id)
+                        },
+                        onCopyId = {
+                            onCopyId(user.id.toString())
+                        },
                         onClick = {
                             onClick(user.domain ?: "")
                         },

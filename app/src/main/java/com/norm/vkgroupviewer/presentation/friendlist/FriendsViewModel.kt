@@ -46,6 +46,19 @@ class FriendsViewModel @Inject constructor(
         }
     }
 
+//    fun showOrHideMoreInfo(id: Int) {
+//        _state.update {
+//            it.copy(
+//                showMoreInfo = _state.value.showMoreInfo.mapValues { map ->
+//                    if (map.key == id) {
+//                        !map.value
+//                    } else
+//                        map.value
+//                }
+//            )
+//        }
+//    }
+
     private fun getFriends(id: Int, fields: String?) {
         viewModelScope.launch {
             vkUseCases.getFriends(id, fields)

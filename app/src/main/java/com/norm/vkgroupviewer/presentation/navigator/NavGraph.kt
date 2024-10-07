@@ -102,6 +102,12 @@ fun NavGraph(
                 modifier = Modifier
                     .fillMaxSize(),
                 state = state,
+                showOrHideMoreInfo = { id ->
+//                    viewModel.showOrHideMoreInfo(id)
+                },
+                onCopyId = {
+
+                },
                 onClick = {
                     val webPage = Intent(Intent.ACTION_VIEW, Uri.parse("https://vk.com/$it"))
                     context.startActivity(webPage)

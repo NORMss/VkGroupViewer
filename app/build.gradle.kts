@@ -54,6 +54,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.material.icons.extended)
+
     implementation(libs.androidx.paging.runtime.ktx)
     implementation(libs.androidx.paging.compose)
 
