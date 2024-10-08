@@ -1,5 +1,8 @@
 package com.norm.vkgroupviewer.presentation.navigator
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.layout.fillMaxSize
@@ -103,10 +106,13 @@ fun NavGraph(
                     .fillMaxSize(),
                 state = state,
                 showOrHideMoreInfo = { id ->
-//                    viewModel.showOrHideMoreInfo(id)
+                    viewModel.showOrHideMoreInfo(id)
                 },
-                onCopyId = {
-
+                onCopyId = { id ->
+                    val clipboard =
+                        context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    val clip: ClipData = ClipData.newPlainText("simple text", id)
+                    clipboard.setPrimaryClip(clip);
                 },
                 onClick = {
                     val webPage = Intent(Intent.ACTION_VIEW, Uri.parse("https://vk.com/$it"))

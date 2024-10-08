@@ -1,15 +1,16 @@
 package com.norm.vkgroupviewer.presentation.friendlist
 
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.norm.vkgroupviewer.domain.remote.dto.friends_info.FriendsInfo
 import com.norm.vkgroupviewer.presentation.Dimens.largeSpacer
 import com.norm.vkgroupviewer.presentation.Dimens.mediumSpacer
 import com.norm.vkgroupviewer.presentation.componets.FriendCard
@@ -26,7 +27,10 @@ fun FriendListScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = largeSpacer),
+                .padding(horizontal = largeSpacer)
+                .scrollable(rememberScrollableState {
+                    it
+                }, Orientation.Vertical),
             verticalArrangement = Arrangement.spacedBy(mediumSpacer),
         ) {
             state.friendsInfo?.let { friendsInfo ->
