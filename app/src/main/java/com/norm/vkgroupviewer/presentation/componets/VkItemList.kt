@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
@@ -32,19 +33,20 @@ import com.norm.vkgroupviewer.presentation.Dimens.mediumSpacer
 import com.norm.vkgroupviewer.presentation.Dimens.roundedSmale
 
 @Composable
-fun VkItemList(
+fun <T> VkItemList(
     isRefresh: Boolean,
     onRefresh: () -> Unit,
     count: Int,
+    collection: List<T>,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
+    content: @Composable (T) -> Unit,
 ) {
     val density = LocalDensity.current
 
     val refreshState = rememberPullToRefreshState()
 
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(horizontal = largeSpacer)
             .pullToRefresh(
@@ -84,11 +86,14 @@ fun VkItemList(
                     horizontalArrangement = Arrangement.Start,
                 ) {
                     Text(
-                        text = "Number of groups: ${count}",
+                        text = "Number of groups: $count",
                         style = MaterialTheme.typography.bodyLarge,
                     )
                 }
             }
+        }
+        items(collection) { item ->
+            content(item)
         }
     }
 }
