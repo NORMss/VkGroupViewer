@@ -64,22 +64,38 @@ class FriendsViewModel @Inject constructor(
         }
     }
 
-    private fun getFriends(id: Int, fields: String?) {
-        viewModelScope.launch {
-            vkUseCases.getFriends(id, fields)
-                .onSuccess { friendsInfo ->
-                    _state.update { it ->
-                        it.copy(
-                            friendsInfo = friendsInfo,
-                            showMoreInfo = friendsInfo.response.items.associate { user ->
-                                user.id to false
-                            }
-                        )
-                    }
-                }
-                .onError {
-
-                }
+    fun refreshVkFriends() {
+        _state.value.userId?.let {
+            viewModelScope.launch {
+                getFriends(it, _state.value.fields)
+            }
         }
+    }
+
+    private fun setStatusLoadingGroups(isLoadingGroups: Boolean) {
+        _state.update {
+            it.copy(
+                isLoadingGroups = isLoadingGroups,
+            )
+        }
+    }
+
+    private suspend fun getFriends(id: Int, fields: String?) {
+        setStatusLoadingGroups(true)
+        vkUseCases.getFriends(id, fields)
+            .onSuccess { friendsInfo ->
+                _state.update { it ->
+                    it.copy(
+                        friendsInfo = friendsInfo,
+                        showMoreInfo = friendsInfo.response.items.associate { user ->
+                            user.id to false
+                        }
+                    )
+                }
+            }
+            .onError {
+
+            }
+        setStatusLoadingGroups(false)
     }
 }

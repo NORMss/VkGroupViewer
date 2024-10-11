@@ -8,4 +8,5 @@ data class FriendsState(
     val userId: Int? = null,
     val fields: String? = null,
     val errorMessage: String? = null,
+    val isLoadingGroups: Boolean = false,
 )

@@ -20,122 +20,24 @@ fun GroupsScreen(
     onClick: (String) -> Unit,
     onRefresh: () -> Unit,
 ) {
-//    val density = LocalDensity.current
-//
-//    val refreshState = rememberPullToRefreshState()
-//
-//    if (state.groupsInfo != null) {
-//        Column(
-//            modifier = modifier,
-//        ) {
-//            PullToRefreshBox(
-//                state = refreshState,
-//                isRefreshing = state.isLoadingGroups,
-//                onRefresh = {
-//                    onRefresh()
-//                },
-//            ) {
-//                LazyColumn(
-//                    modifier = Modifier
-//                        .fillMaxSize()
-//                        .padding(horizontal = largeSpacer)
-//                        .pullToRefresh(
-//                            state = refreshState,
-//                            isRefreshing = state.isLoadingGroups,
-//                            onRefresh = onRefresh,
-//                        )
-//                        .graphicsLayer(
-//                            translationY = with(density) { (PullToRefreshDefaults.PositionalThreshold + mediumSpacer).toPx() * refreshState.distanceFraction }
-//                        ),
-//                    verticalArrangement = Arrangement.spacedBy(mediumSpacer)
-//                ) {
-//                    item {
-//                        Card(
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .clip(RoundedCornerShape(roundedSmale)),
-//                            colors = CardColors(
-//                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-//                                disabledContentColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(
-//                                    alpha = 0.7f
-//                                ),
-//                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-//                                disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer.copy(
-//                                    alpha = 0.7f
-//                                ),
-//                            ),
-//                        ) {
-//                            Row(
-//                                modifier = Modifier
-//                                    .fillMaxWidth()
-//                                    .padding(
-//                                        vertical = largeSpacer,
-//                                        horizontal = mediumSpacer,
-//                                    ),
-//                                verticalAlignment = Alignment.CenterVertically,
-//                                horizontalArrangement = Arrangement.Start,
-//                            ) {
-//                                Text(
-//                                    text = "Number of groups: ${state.groupsInfo.response.count}",
-//                                    style = MaterialTheme.typography.bodyLarge,
-//                                )
-//                            }
-//                        }
-//
-//                    }
-//                    items(
-//                        items = state.groupsInfo.response.items,
-//                        key = { group ->
-//                            group.id
-//                        },
-//                    ) { group ->
-//                        GroupCard(
-//                            name = group.name,
-//                            type = group.type,
-//                            domain = group.screen_name,
-//                            image = group.photo_50,
-//                            onClick = {
-//                                onClick(group.screen_name ?: group.id.toString())
-//                            }
-//                        )
-//                    }
-//                }
-//            }
-//        }
-//    } else if (state.isLoadingGroups && state.groupsInfo == null) {
-//        Box(
-//            modifier = modifier,
-//            contentAlignment = Alignment.Center,
-//        ) {
-//            CircularProgressIndicator()
-//        }
-//    } else {
-//        Box(
-//            modifier = modifier,
-//            contentAlignment = Alignment.Center,
-//        ) {
-//            Text(
-//                text = "Groups entity"
-//            )
-//        }
-//    }
-    if (state.groupsInfo != null) {
-        VkItemList(
-            isRefresh = state.isLoadingGroups,
-            onRefresh = onRefresh,
-            count = state.groupsInfo.response.count,
-            collection = state.groupsInfo.response.items,
-        ) { group ->
-            GroupCard(
-                name = group.name,
-                type = group.type,
-                domain = group.screen_name,
-                image = group.photo_50,
-                onClick = {
-                    onClick(group.screen_name ?: group.id.toString())
-                }
-            )
-        }
+    VkItemList(
+        isRefresh = state.isLoadingGroups,
+        onRefresh = onRefresh,
+        count = state.groupsInfo?.response?.count,
+        collection = state.groupsInfo?.response?.items,
+        keySelector = {
+            it.id
+        },
+    ) { group ->
+        GroupCard(
+            name = group.name,
+            type = group.type,
+            domain = group.screen_name,
+            image = group.photo_50,
+            onClick = {
+                onClick(group.screen_name ?: group.id.toString())
+            }
+        )
     }
 }
 

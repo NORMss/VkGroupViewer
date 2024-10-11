@@ -102,11 +102,12 @@ fun NavGraph(
                 )
             }
             FriendListScreen(
-                modifier = Modifier
-                    .fillMaxSize(),
                 state = state,
                 showOrHideMoreInfo = { id ->
                     viewModel.showOrHideMoreInfo(id)
+                },
+                onRefresh = {
+                    viewModel.refreshVkFriends()
                 },
                 onCopyId = { id ->
                     val clipboard =

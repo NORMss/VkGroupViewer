@@ -1,10 +1,9 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
 package com.norm.vkgroupviewer.presentation.componets
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,8 +35,9 @@ import com.norm.vkgroupviewer.presentation.Dimens.roundedSmale
 fun <T> VkItemList(
     isRefresh: Boolean,
     onRefresh: () -> Unit,
-    count: Int,
-    collection: List<T>,
+    count: Int? = null,
+    collection: List<T>? = null,
+    keySelector: (T) -> Int,
     modifier: Modifier = Modifier,
     content: @Composable (T) -> Unit,
 ) {
@@ -45,55 +45,84 @@ fun <T> VkItemList(
 
     val refreshState = rememberPullToRefreshState()
 
-    LazyColumn(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = largeSpacer)
-            .pullToRefresh(
-                state = refreshState,
-                isRefreshing = isRefresh,
-                onRefresh = onRefresh,
-            )
-            .graphicsLayer(
-                translationY = with(density) { (androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.PositionalThreshold + com.norm.vkgroupviewer.presentation.Dimens.mediumSpacer).toPx() * refreshState.distanceFraction }
-            ),
-        verticalArrangement = Arrangement.spacedBy(mediumSpacer),
-    ) {
-        item {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(roundedSmale)),
-                colors = CardColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    disabledContentColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(
-                        alpha = 0.7f
+    if (collection != null) {
+        PullToRefreshBox(
+            state = refreshState,
+            isRefreshing = isRefresh,
+            onRefresh = {
+                onRefresh()
+            },
+        ) {
+            LazyColumn(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(horizontal = largeSpacer)
+                    .graphicsLayer(
+                        translationY = with(density) { (PullToRefreshDefaults.PositionalThreshold + com.norm.vkgroupviewer.presentation.Dimens.mediumSpacer).toPx() * refreshState.distanceFraction }
                     ),
-                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                    disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer.copy(
-                        alpha = 0.7f
-                    ),
-                ),
+                verticalArrangement = Arrangement.spacedBy(mediumSpacer),
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            vertical = largeSpacer,
-                            horizontal = mediumSpacer,
-                        ),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start,
-                ) {
-                    Text(
-                        text = "Number of groups: $count",
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
+                count?.let {
+                    item {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(roundedSmale)),
+                            colors = CardColors(
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                disabledContentColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(
+                                    alpha = 0.7f
+                                ),
+                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                                disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer.copy(
+                                    alpha = 0.7f
+                                ),
+                            ),
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(
+                                        vertical = largeSpacer,
+                                        horizontal = mediumSpacer,
+                                    ),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Start,
+                            ) {
+                                Text(
+                                    text = "Number of groups: $count",
+                                    style = MaterialTheme.typography.bodyLarge,
+                                )
+                            }
+                        }
+                    }
                 }
+                items(
+                    items = collection,
+                    key = { item ->
+                        keySelector(item)
+                    }
+                ) { item ->
+                    content(item)
+                }
+
             }
         }
-        items(collection) { item ->
-            content(item)
+    } else if (isRefresh) {
+        Box(
+            modifier = modifier,
+            contentAlignment = Alignment.Center,
+        ) {
+            CircularProgressIndicator()
+        }
+    } else {
+        Box(
+            modifier = modifier,
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = "Groups entity"
+            )
         }
     }
 }
