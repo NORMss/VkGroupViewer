@@ -1,9 +1,6 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.norm.vkgroupviewer.presentation.groups
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -15,7 +12,6 @@ import com.norm.vkgroupviewer.presentation.componets.VkItemList
 
 @Composable
 fun GroupsScreen(
-    modifier: Modifier = Modifier,
     state: GroupsState,
     onClick: (String) -> Unit,
     onRefresh: () -> Unit,
@@ -28,6 +24,8 @@ fun GroupsScreen(
         keySelector = {
             it.id
         },
+        modifier = Modifier
+            .fillMaxSize(),
     ) { group ->
         GroupCard(
             name = group.name,
@@ -45,8 +43,6 @@ fun GroupsScreen(
 @Composable
 private fun PreviewGroupsScreenGroups() {
     GroupsScreen(
-        modifier = Modifier
-            .fillMaxSize(),
         state = groupsStateGroupsPreview,
         onClick = {
 
@@ -61,8 +57,6 @@ private fun PreviewGroupsScreenGroups() {
 @Composable
 private fun PreviewGroupsScreenNotGroups() {
     GroupsScreen(
-        modifier = Modifier
-            .fillMaxSize(),
         state = groupsStatePreview,
         onClick = {
 
@@ -77,8 +71,6 @@ private fun PreviewGroupsScreenNotGroups() {
 @Composable
 private fun PreviewGroupsScreenNotGroupsIsLoading() {
     GroupsScreen(
-        modifier = Modifier
-            .fillMaxSize(),
         state = groupsStateNotGroupsIsLoadingPreview,
         onClick = {
 
@@ -93,8 +85,6 @@ private fun PreviewGroupsScreenNotGroupsIsLoading() {
 @Composable
 private fun PreviewGroupsScreenGroupsIsLoading() {
     GroupsScreen(
-        modifier = Modifier
-            .fillMaxSize(),
         state = groupsStateGroupsIsLoadingPreview,
         onClick = {
 

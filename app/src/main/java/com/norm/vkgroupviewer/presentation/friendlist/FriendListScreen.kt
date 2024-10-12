@@ -1,5 +1,6 @@
 package com.norm.vkgroupviewer.presentation.friendlist
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.norm.vkgroupviewer.presentation.componets.FriendCard
@@ -23,6 +24,8 @@ fun FriendListScreen(
         keySelector = {
             it.id
         },
+        modifier = Modifier
+            .fillMaxSize(),
     ) { user ->
         FriendCard(
             userId = user.id.toString(),
